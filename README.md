@@ -1,0 +1,1 @@
+# powerdns-authoritative-schema

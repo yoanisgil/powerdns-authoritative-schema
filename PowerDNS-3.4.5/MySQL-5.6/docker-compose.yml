@@ -1,0 +1,22 @@
+powerdns:
+    image: crakmedia/powerdns-authoritative:3.4.5
+    volumes:
+        - ./docker/pdns.d/pdns.conf:/etc/pdns/pdns.conf
+        - ./docker/pdns.d/pdns.gmysql.conf:/etc/pdns/pdns.d/pdns.gmysql.conf
+    links:
+        - pdns_mysql:mysql
+    hostname: powerdns
+    command: ["/bin/bash", "-c", "sleep 5; pdns_server"]
+pdns_mysql:
+    image: mysql:5.6
+    volumes_from:
+      - testing_mysql_data
+    links:
+      - testing_mysql_data
+    ports:
+      - "6406:3306"
+testing_mysql_data:
+    image: yoanisgil/powerdns-authoritative-schema:345.56
+    volumes:
+      - /var/lib/mysql
+    command: tail -f /dev/null
